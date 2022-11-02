@@ -2,10 +2,10 @@ package com.example.FavoriteRecipe.controllerTest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.assignment.FavoriteRecipe.FavoriteRecipeApplication;
 import com.assignment.FavoriteRecipe.bean.Recipe;
 import com.assignment.FavoriteRecipe.bean.RecipeSearchDTO;
@@ -16,61 +16,61 @@ import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(classes = FavoriteRecipeApplication.class)
 class FavoriteRecipeControllerTest {
 
-	@Autowired
+	@InjectMocks
 	private FavoriteRecipeController theFavoriteRecipeController;
 
-	@MockBean
-	private RecipeService mockCustomerDaoService;
+	@Mock
+	private RecipeService mockService;
 
 	@Test
 	public void givenRecipeObjectthenCreateRecipe() {
 		Recipe mockRecipe = getRecipeObject().get();
 		theFavoriteRecipeController.createRecipe(mockRecipe);
-		verify(mockCustomerDaoService, times(1)).insert(mockRecipe);
+		verify(mockService, times(1)).insert(mockRecipe);
 	}
 
 	@Test
 	public void givenRecipeSearch() {
 		RecipeSearchDTO mockRecipe = getRecipeSearchObject().get();
 		theFavoriteRecipeController.searchRecipe(mockRecipe);
-		verify(mockCustomerDaoService, times(1)).searchRecipe(mockRecipe);
+		verify(mockService, times(1)).searchRecipe(mockRecipe);
 
 	}
 
 	@Test
 	public void givenRecipeIdthenGetRecipeById() {
 		Long expectedId = (long) 1;
-		when(mockCustomerDaoService.getRecipeById(expectedId)).thenReturn(getRecipeObject());
+		when(mockService.getRecipeById(expectedId)).thenReturn(getRecipeObject());
 		theFavoriteRecipeController.getRecipeById(expectedId);
-		verify(mockCustomerDaoService, times(1)).getRecipeById(expectedId);
+		verify(mockService, times(1)).getRecipeById(expectedId);
 	}
 
 	@Test
 	public void givenRecipeNamethenGetRecipeByName() {
 		String expectedRecipeName = "Kabab";
-		when(mockCustomerDaoService.getRecipeByName(expectedRecipeName)).thenReturn(getRecipeObject());
+		when(mockService.getRecipeByName(expectedRecipeName)).thenReturn(getRecipeObject());
 		theFavoriteRecipeController.getRecipeByName(expectedRecipeName);
-		verify(mockCustomerDaoService, times(1)).getRecipeByName(expectedRecipeName);
+		verify(mockService, times(1)).getRecipeByName(expectedRecipeName);
 	}
 
 	@Test
 	public void givenRecipethenGetRecipeList() {
-		when(mockCustomerDaoService.getRecipeList()).thenReturn(List.of(getRecipeObject().get()));
+		when(mockService.getRecipeList()).thenReturn(List.of(getRecipeObject().get()));
 		theFavoriteRecipeController.getRecipeList();
-		verify(mockCustomerDaoService, times(1)).getRecipeList();
+		verify(mockService, times(1)).getRecipeList();
 	}
 
 	@Test
 	public void givenRecipeIdthenDeleteRecipeById() {
 		Long expectedId = 1l;
-		when(mockCustomerDaoService.getRecipeById(expectedId)).thenReturn(getRecipeObject());
+		when(mockService.getRecipeById(expectedId)).thenReturn(getRecipeObject());
 		theFavoriteRecipeController.deleteRecipeById(expectedId);
-		verify(mockCustomerDaoService, times(1)).getRecipeById(expectedId);
-		verify(mockCustomerDaoService, times(1)).deleteRecipeById(expectedId);
+		verify(mockService, times(1)).getRecipeById(expectedId);
+		verify(mockService, times(1)).deleteRecipeById(expectedId);
 	}
 
 	public Optional<Recipe> getRecipeObject() {
